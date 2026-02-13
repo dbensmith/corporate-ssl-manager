@@ -1,6 +1,6 @@
 #!/bin/bash
 # Docker Corporate Certificate Wrapper
-# Automatically injects Thomson Reuters corporate certificates into Docker containers
+# Automatically injects corporate certificates into Docker containers
 # Usage: docker-corp run [docker-options] image [command]
 
 DOCKER_CERT_PATH="$HOME/.docker/ca-bundle.crt"
