@@ -3,6 +3,7 @@
 ## Prerequisites
 
 ### System Requirements
+
 - **Windows 10/11** with PowerShell 5.1+
 - **WSL 2** with Ubuntu (or compatible distribution)
 - **Docker** installed in WSL (optional, for Docker script)
@@ -10,12 +11,14 @@
 - **Administrator privileges** for PowerShell execution
 
 ### WSL Setup
+
 ```powershell
 # Enable WSL and install Ubuntu
 wsl --install Ubuntu
 ```
 
 ### Docker Setup (Optional)
+
 ```bash
 # In WSL Ubuntu
 sudo apt update
@@ -34,6 +37,7 @@ sudo usermod -aG docker $USER
 **Script**: `Install-CorporateSSL-WSL.ps1`
 
 **Steps**:
+
 ```powershell
 # Basic installation (auto-detect corporate certificates)
 .\Install-CorporateSSL-WSL.ps1 -Verbose
@@ -49,13 +53,15 @@ sudo usermod -aG docker $USER
 ```
 
 **What it does**:
+
 1. Scans Windows certificate stores for corporate certificates
 2. Excludes public CAs (DigiCert, Let's Encrypt, etc.)
 3. Tests each certificate against multiple domains
 4. Installs only effective certificates in WSL
 5. Updates WSL certificate store
 
-**Expected Result**: 
+**Expected Result**:
+
 - WSL can access HTTPS sites through corporate proxy
 - `curl https://google.com` works without SSL errors
 
@@ -66,6 +72,7 @@ sudo usermod -aG docker $USER
 **Script**: `Install-CorporateSSL-Node.ps1`
 
 **Steps**:
+
 ```powershell
 # Basic installation with certificate bundle
 .\Install-CorporateSSL-Node.ps1 -SearchPatterns @("YourCompany") -BundleAllCerts -Verbose
@@ -78,6 +85,7 @@ sudo usermod -aG docker $USER
 ```
 
 **What it does**:
+
 1. Finds corporate certificates from Windows stores
 2. Creates comprehensive certificate bundle
 3. Sets Node.js environment variables:
@@ -86,6 +94,7 @@ sudo usermod -aG docker $USER
 4. Tests Node.js SSL connectivity
 
 **Expected Result**:
+
 - Node.js applications can access HTTPS APIs
 - `node test-ssl-connectivity.js` shows 100% success rate
 
@@ -96,6 +105,7 @@ sudo usermod -aG docker $USER
 **Script**: `Install-CorporateSSL-Docker.ps1`
 
 **Steps**:
+
 ```powershell
 # Complete Docker setup with cleanup
 .\Install-CorporateSSL-Docker.ps1 -SearchPatterns @("YourCompany") -CleanInstall -Verbose
@@ -108,6 +118,7 @@ sudo usermod -aG docker $USER
 ```
 
 **What it does**:
+
 1. Creates Docker CA bundle with corporate certificates
 2. Configures Docker registry certificates for pull/push operations
 3. Installs system-wide CA certificates
@@ -115,6 +126,7 @@ sudo usermod -aG docker $USER
 5. Sets up Docker environment and aliases
 
 **Expected Result**:
+
 - Standard `docker pull` commands work
 - `docker-corp run` containers can access HTTPS sites
 - All containers automatically use corporate certificates
@@ -124,10 +136,11 @@ sudo usermod -aG docker $USER
 **Recommended installation order**:
 
 1. **WSL First**: `.\Install-CorporateSSL-WSL.ps1`
-2. **Node.js Second**: `.\Install-CorporateSSL-Node.ps1` 
+2. **Node.js Second**: `.\Install-CorporateSSL-Node.ps1`
 3. **Docker Last**: `.\Install-CorporateSSL-Docker.ps1`
 
 **Why this order**:
+
 - WSL provides the foundation for other environments
 - Node.js setup is independent and can be done separately
 - Docker setup builds on WSL certificate configuration
@@ -135,6 +148,7 @@ sudo usermod -aG docker $USER
 ## Common Installation Patterns
 
 ### Pattern 1: Auto-Discovery
+
 ```powershell
 # Let scripts auto-detect corporate certificates
 .\Install-CorporateSSL-WSL.ps1 -Verbose
@@ -143,6 +157,7 @@ sudo usermod -aG docker $USER
 ```
 
 ### Pattern 2: Company-Specific
+
 ```powershell
 # Target specific company certificates
 $patterns = @("YourCompany", "Corporate CA", "Enterprise PKI")
@@ -153,6 +168,7 @@ $patterns = @("YourCompany", "Corporate CA", "Enterprise PKI")
 ```
 
 ### Pattern 3: Comprehensive
+
 ```powershell
 # Install all effective certificates
 .\Install-CorporateSSL-WSL.ps1 -RequireAllCerts -Verbose
@@ -163,6 +179,7 @@ $patterns = @("YourCompany", "Corporate CA", "Enterprise PKI")
 ## Verification
 
 ### WSL Verification
+
 ```bash
 # Test SSL connectivity
 curl -I https://google.com
@@ -174,6 +191,7 @@ sudo update-ca-certificates --verbose
 ```
 
 ### Node.js Verification
+
 ```bash
 # Check environment variables
 echo $NODE_EXTRA_CA_CERTS
@@ -184,6 +202,7 @@ node tests/test-ssl-connectivity.js
 ```
 
 ### Docker Verification
+
 ```bash
 # Test standard Docker operations
 docker pull hello-world
@@ -200,6 +219,7 @@ docker-test-github
 ## Troubleshooting Installation
 
 ### Issue: "No certificates found"
+
 ```powershell
 # Broaden search patterns
 .\Install-CorporateSSL-WSL.ps1 -SearchPatterns @("CA", "Root", "Corporate", "Enterprise") -Verbose
@@ -209,6 +229,7 @@ Get-ChildItem Cert:\LocalMachine\CA | Where-Object { $_.Subject -like "*Corporat
 ```
 
 ### Issue: "SSL tests still failing"
+
 ```powershell
 # Install all effective certificates
 .\Install-CorporateSSL-WSL.ps1 -RequireAllCerts -Verbose
@@ -218,6 +239,7 @@ Get-ChildItem Cert:\LocalMachine\CA | Where-Object { $_.Subject -like "*Corporat
 ```
 
 ### Issue: "Docker containers still failing"
+
 ```bash
 # Test docker-corp directly
 /usr/local/bin/docker-corp run --rm curlimages/curl:latest curl -v https://google.com

@@ -7,11 +7,13 @@ This guide helps resolve common issues when using the WSL SSL Inspector.
 ### 1. WSL Not Available
 
 #### Error Message
+
 ```
 WSL is not available or properly configured
 ```
 
 #### Solutions
+
 ```powershell
 # Check if WSL is installed
 wsl --version
@@ -29,11 +31,13 @@ wsl --install -d Ubuntu
 ### 2. No Corporate Certificates Found
 
 #### Error Message
+
 ```
 No corporate certificates found matching the criteria
 ```
 
 #### Solutions
+
 ```powershell
 # Try broader search patterns
 .\Install-CorporateSSL-WSL.ps1 -SearchPatterns @("CA", "Root", "Certificate") -Verbose
@@ -49,11 +53,13 @@ Get-ChildItem -Path Cert:\CurrentUser\Root | Where-Object { $_.Subject -like "*C
 ### 3. Permission Denied in WSL
 
 #### Error Message
+
 ```
 Permission denied when accessing /usr/local/share/ca-certificates/
 ```
 
 #### Solutions
+
 ```bash
 # In WSL, check current user
 whoami
@@ -72,11 +78,13 @@ sudo chmod 755 /usr/local/share/ca-certificates/
 ### 4. SSL Tests Still Failing After Installation
 
 #### Error Message
+
 ```
 SSL certificate problem: unable to get local issuer certificate
 ```
 
 #### Solutions
+
 ```powershell
 # Install all effective certificates, not just the first one
 .\Install-CorporateSSL-WSL.ps1 -RequireAllCerts -Verbose
@@ -89,6 +97,7 @@ SSL certificate problem: unable to get local issuer certificate
 ```
 
 #### Manual Verification in WSL
+
 ```bash
 # Check installed certificates
 ls -la /usr/local/share/ca-certificates/
@@ -106,11 +115,13 @@ openssl s_client -connect google.com:443 -servername google.com
 ### 5. Unsupported WSL Distribution
 
 #### Error Message
+
 ```
 WSL distribution 'MyDistro' is not supported
 ```
 
 #### Solutions
+
 ```powershell
 # List supported distributions
 Get-Content .\Install-CorporateSSL-WSL.ps1 | Select-String "WSLDistros.*="
@@ -125,11 +136,13 @@ Get-Content .\Install-CorporateSSL-WSL.ps1 | Select-String "WSLDistros.*="
 ### 6. Export Directory Access Denied
 
 #### Error Message
+
 ```
 Access denied when creating export directory
 ```
 
 #### Solutions
+
 ```powershell
 # Use a different export path
 .\Install-CorporateSSL-WSL.ps1 -CertificateExportPath "$env:TEMP\certificates"
@@ -144,11 +157,13 @@ Get-Acl "$env:UserProfile\certificates"
 ### 7. Curl Not Available in WSL
 
 #### Error Message
+
 ```
 curl is not available in the target WSL distribution
 ```
 
 #### Solutions
+
 The script should automatically install curl, but if it fails:
 
 ```bash
@@ -170,11 +185,13 @@ sudo pacman -Sy curl ca-certificates
 ### 8. Certificate Export Fails
 
 #### Error Message
+
 ```
 Failed to export certificate to file
 ```
 
 #### Solutions
+
 ```powershell
 # Check if export directory exists and is writable
 Test-Path "$env:UserProfile\certificates"
@@ -189,11 +206,13 @@ New-Item -ItemType Directory -Path "$env:UserProfile\certificates" -Force
 ### 9. Script Execution Policy Issues
 
 #### Error Message
+
 ```
 Execution of scripts is disabled on this system
 ```
 
 #### Solutions
+
 ```powershell
 # Check current execution policy
 Get-ExecutionPolicy
@@ -208,11 +227,13 @@ PowerShell -ExecutionPolicy Bypass -File ".\Install-CorporateSSL-WSL.ps1"
 ### 10. Network Connectivity Issues
 
 #### Error Message
+
 ```
 Timeout when testing SSL connectivity
 ```
 
 #### Solutions
+
 ```powershell
 # Increase timeout
 .\Install-CorporateSSL-WSL.ps1 -TestTimeout 60
@@ -245,6 +266,7 @@ Enable maximum verbosity for troubleshooting:
 ### Manual Certificate Verification
 
 1. **Check Windows Certificate Stores:**
+
 ```powershell
 # List all certificates with "CA" in name
 Get-ChildItem -Path Cert:\LocalMachine\Root | Where-Object { $_.Subject -like "*CA*" } | Select-Object Subject, Thumbprint, NotAfter
@@ -253,7 +275,8 @@ Get-ChildItem -Path Cert:\LocalMachine\Root | Where-Object { $_.Subject -like "*
 Get-ChildItem -Path Cert:\LocalMachine\Root | Where-Object { $_.Thumbprint -eq "YOUR_THUMBPRINT" } | Format-List *
 ```
 
-2. **Verify Certificate Export:**
+1. **Verify Certificate Export:**
+
 ```powershell
 # Check exported certificate format
 Get-Content "$env:UserProfile\certificates\YourCert.crt"
@@ -263,7 +286,8 @@ $cert = Get-Content "$env:UserProfile\certificates\YourCert.crt" -Raw
 $cert -match "-----BEGIN CERTIFICATE-----" -and $cert -match "-----END CERTIFICATE-----"
 ```
 
-3. **Test WSL Certificate Installation:**
+1. **Test WSL Certificate Installation:**
+
 ```bash
 # Check certificate is copied
 ls -la /usr/local/share/ca-certificates/
@@ -307,6 +331,7 @@ Run the test suite to validate your environment:
 ## Known Limitations
 
 ### 1. Multiple SSL Inspection Layers
+
 Some corporate environments have multiple SSL inspection layers. You may need to install certificates from multiple vendors:
 
 ```powershell
@@ -314,6 +339,7 @@ Some corporate environments have multiple SSL inspection layers. You may need to
 ```
 
 ### 2. Intermediate Certificate Chains
+
 Some applications require the complete certificate chain:
 
 ```powershell
@@ -321,6 +347,7 @@ Some applications require the complete certificate chain:
 ```
 
 ### 3. Application-Specific Certificates
+
 Some applications may require additional configuration beyond system certificates:
 
 ```bash
@@ -338,6 +365,7 @@ git config --global http.sslCAInfo /etc/ssl/certs/ca-certificates.crt
 ## Getting Help
 
 ### 1. Enable Detailed Logging
+
 Always use `-Verbose` and check log files:
 
 ```powershell
@@ -345,6 +373,7 @@ Always use `-Verbose` and check log files:
 ```
 
 ### 2. Run Dry Run First
+
 Use `-DryRun` to see what the script would do:
 
 ```powershell
@@ -352,6 +381,7 @@ Use `-DryRun` to see what the script would do:
 ```
 
 ### 3. Export Analysis Results
+
 Export detailed analysis for review:
 
 ```powershell
@@ -359,6 +389,7 @@ Export detailed analysis for review:
 ```
 
 ### 4. Check System Requirements
+
 - Windows 10/11 with WSL2
 - PowerShell 5.1 or higher
 - Administrator privileges
@@ -387,6 +418,7 @@ $PSVersionTable
 ```
 
 If you continue to experience issues, provide this diagnostic information along with:
+
 - The complete error message
 - The command you ran
 - The relevant log file content
