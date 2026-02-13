@@ -2,10 +2,10 @@
 
 ## Overview
 
-The Corporate SSL Certificate Manager provides three main scripts for different environments:
+The Corporate SSL/TLS Certificate Manager provides three main scripts for different environments:
 
 1. **`Install-CorporateSSL-WSL.ps1`** - WSL certificate configuration
-2. **`Install-CorporateSSL-Node.ps1`** - Node.js certificate configuration  
+2. **`Install-CorporateSSL-Node.ps1`** - Node.js certificate configuration
 3. **`Install-CorporateSSL-Docker.ps1`** - Docker certificate configuration
 
 Each script can be used independently or together for comprehensive SSL support.
@@ -15,6 +15,7 @@ Each script can be used independently or together for comprehensive SSL support.
 ### WSL Environment
 
 #### Basic Usage
+
 ```powershell
 # Auto-detect and install minimal certificates
 .\Install-CorporateSSL-WSL.ps1 -Verbose
@@ -24,6 +25,7 @@ Each script can be used independently or together for comprehensive SSL support.
 ```
 
 #### Advanced Usage
+
 ```powershell
 # Install all effective certificates
 .\Install-CorporateSSL-WSL.ps1 -RequireAllCerts -Verbose
@@ -36,6 +38,7 @@ Each script can be used independently or together for comprehensive SSL support.
 ```
 
 #### WSL Post-Installation Usage
+
 ```bash
 # Test SSL connectivity
 curl -I https://google.com
@@ -51,6 +54,7 @@ sudo update-ca-certificates --verbose
 ### Node.js Environment
 
 #### Basic Usage
+
 ```powershell
 # Create certificate bundle and configure environment
 .\Install-CorporateSSL-Node.ps1 -SearchPatterns @("YourCompany") -BundleAllCerts -Verbose
@@ -60,6 +64,7 @@ sudo update-ca-certificates --verbose
 ```
 
 #### Advanced Usage
+
 ```powershell
 # Create comprehensive certificate bundle
 .\Install-CorporateSSL-Node.ps1 -BundleAllCerts -RequireAllCerts -Verbose
@@ -72,6 +77,7 @@ sudo update-ca-certificates --verbose
 ```
 
 #### Node.js Post-Installation Usage
+
 ```bash
 # Check environment variables
 echo $NODE_EXTRA_CA_CERTS
@@ -87,6 +93,7 @@ node -e "const https = require('https'); https.get('https://api.github.com', (re
 ### Docker Environment
 
 #### Basic Usage
+
 ```powershell
 # Complete Docker setup with cleanup
 .\Install-CorporateSSL-Docker.ps1 -SearchPatterns @("YourCompany") -CleanInstall -Verbose
@@ -96,6 +103,7 @@ node -e "const https = require('https'); https.get('https://api.github.com', (re
 ```
 
 #### Advanced Usage
+
 ```powershell
 # Dry run to see what would be configured
 .\Install-CorporateSSL-Docker.ps1 -DryRun -Verbose
@@ -105,6 +113,7 @@ node -e "const https = require('https'); https.get('https://api.github.com', (re
 ```
 
 #### Docker Post-Installation Usage
+
 ```bash
 # Standard Docker registry operations (work automatically)
 docker pull node:18
@@ -129,6 +138,7 @@ docker-corp run -it --rm python:3.12 bash
 ## Interactive Usage After Installation
 
 ### WSL Daily Usage
+
 ```bash
 # All standard tools work with HTTPS
 curl https://api.github.com
@@ -143,6 +153,7 @@ npm install express
 ```
 
 ### Node.js Daily Usage
+
 ```bash
 # All Node.js HTTPS requests work
 npm install
@@ -154,6 +165,7 @@ node -e "require('https').get('https://api.github.com', console.log)"
 ```
 
 ### Docker Daily Usage
+
 ```bash
 # Registry operations work automatically
 docker pull alpine
@@ -173,10 +185,11 @@ docker-corp run -v $(pwd):/app -w /app python:3.12 python app.py
 ## Environment Integration
 
 ### PowerShell Profile Integration
+
 ```powershell
 # Add to PowerShell profile for automatic setup
 Add-Content $PROFILE @"
-# Corporate SSL Certificate Manager
+# Corporate SSL/TLS Certificate Manager
 Set-Location 'C:\path\to\corporate-ssl-manager'
 
 function Install-WSLCerts { .\Install-CorporateSSL-WSL.ps1 -Verbose }
@@ -186,6 +199,7 @@ function Install-DockerCerts { .\Install-CorporateSSL-Docker.ps1 -CleanInstall -
 ```
 
 ### WSL Profile Integration
+
 ```bash
 # Add to ~/.bashrc for convenient aliases
 echo 'alias ssl-test-wsl="curl -I https://google.com && curl -I https://github.com"' >> ~/.bashrc
@@ -231,6 +245,7 @@ echo 'alias ssl-test-docker="docker-test-google && docker-test-github"' >> ~/.ba
 ## Usage Examples by Scenario
 
 ### Scenario 1: New Development Machine
+
 ```powershell
 # Complete setup for new machine
 .\Install-CorporateSSL-WSL.ps1 -Verbose
@@ -239,6 +254,7 @@ echo 'alias ssl-test-docker="docker-test-google && docker-test-github"' >> ~/.ba
 ```
 
 ### Scenario 2: Specific Company Setup
+
 ```powershell
 # Setup for specific corporate environment
 $companyPatterns = @("Contoso", "Corporate CA", "Enterprise PKI")
@@ -249,6 +265,7 @@ $companyPatterns = @("Contoso", "Corporate CA", "Enterprise PKI")
 ```
 
 ### Scenario 3: Troubleshooting SSL Issues
+
 ```powershell
 # Comprehensive certificate analysis
 .\Install-CorporateSSL-WSL.ps1 -DryRun -ExportFormat Both -Verbose
@@ -262,6 +279,7 @@ $companyPatterns = @("Contoso", "Corporate CA", "Enterprise PKI")
 ```
 
 ### Scenario 4: Development Team Setup
+
 ```powershell
 # Standardized setup for development teams
 $teamPatterns = @("YourCompany")
@@ -275,6 +293,7 @@ $teamDomains = @("https://api.company.com", "https://registry.company.com", "htt
 ## Best Practices
 
 ### 1. Regular Maintenance
+
 ```powershell
 # Monthly certificate check
 .\Install-CorporateSSL-WSL.ps1 -DryRun -Verbose
@@ -283,6 +302,7 @@ $teamDomains = @("https://api.company.com", "https://registry.company.com", "htt
 ```
 
 ### 2. Team Standardization
+
 ```powershell
 # Create team-specific configuration script
 $teamConfig = @{
@@ -296,6 +316,7 @@ $teamConfig = @{
 ```
 
 ### 3. CI/CD Integration
+
 ```powershell
 # Automated setup for CI/CD environments
 .\Install-CorporateSSL-WSL.ps1 -SearchPatterns @("YourCompany") -RequireAllCerts
@@ -306,6 +327,7 @@ $teamConfig = @{
 ## Support
 
 For additional help:
+
 - Check [Troubleshooting Guide](TROUBLESHOOTING.md)
 - Review [Installation Guide](INSTALLATION.md)
 - Examine script logs in `logs/` directory

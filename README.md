@@ -1,4 +1,4 @@
-# Corporate SSL Certificate Manager
+# Corporate SSL/TLS Certificate Manager
 
 A comprehensive PowerShell solution for automatically identifying, testing, and installing corporate certificates in WSL and Node.js environments to resolve SSL inspection issues.
 
@@ -7,13 +7,14 @@ A comprehensive PowerShell solution for automatically identifying, testing, and 
 This tool solves the common problem where corporate networks use SSL inspection, causing SSL certificate verification failures in development environments. It automatically:
 
 1. **Discovers** corporate certificates from Windows certificate stores
-2. **Tests** each certificate systematically against real domains  
+2. **Tests** each certificate systematically against real domains
 3. **Installs** only effective certificates in target environments
 4. **Validates** complete SSL functionality
 
 ## 🚀 Quick Start
 
 ### WSL Environment
+
 ```powershell
 # Basic usage - auto-detect everything
 .\Install-CorporateSSL-WSL.ps1 -Verbose
@@ -26,6 +27,7 @@ This tool solves the common problem where corporate networks use SSL inspection,
 ```
 
 ### Node.js Environment
+
 ```powershell
 # Install certificates and configure environment variables
 .\Install-CorporateSSL-Node.ps1 -SearchPatterns @("YourCompany") -BundleAllCerts -Verbose
@@ -35,6 +37,7 @@ node tests\test-ssl-connectivity.js
 ```
 
 ### Docker Environment
+
 ```powershell
 # Complete Docker setup with automatic certificate injection
 .\Install-CorporateSSL-Docker.ps1 -SearchPatterns @("YourCompany") -CleanInstall -Verbose
@@ -68,24 +71,28 @@ corporate-ssl-manager/
 ## 🔧 Key Features
 
 ### Intelligent Certificate Discovery
+
 - **Pattern-based search** for corporate certificates
 - **Excludes common public CAs** (DigiCert, Let's Encrypt, etc.)
 - **Multi-store scanning** (LocalMachine, CurrentUser)
 - **Duplicate detection** and filtering
 
-### Systematic Testing  
+### Systematic Testing
+
 - **Pre-installation baseline** testing
 - **Individual certificate effectiveness** testing
 - **Multi-domain validation** against popular sites
 - **Success rate calculation** and reporting
 
 ### Environment Integration
+
 - **WSL**: Support for 25+ Linux distributions with auto-detection
 - **Node.js**: Environment variable configuration and bundle creation
 - **Smart detection** of target environments
 - **Prerequisite installation** (curl, ca-certificates)
 
 ### Comprehensive Logging
+
 - **Detailed timestamped logs** with color coding
 - **Export to CSV/JSON** formats
 - **Test result tracking** and analysis
@@ -94,6 +101,7 @@ corporate-ssl-manager/
 ## 📊 Supported Environments
 
 ### WSL Distributions
+
 - **Ubuntu Family**: Ubuntu, Ubuntu-18.04/20.04/22.04/24.04, Debian, Kali Linux
 - **RHEL Family**: Fedora, CentOS, RHEL, AlmaLinux, Rocky Linux
 - **SUSE Family**: openSUSE Leap/Tumbleweed, SUSE Linux Enterprise
@@ -101,10 +109,12 @@ corporate-ssl-manager/
 - **Other**: Alpine Linux
 
 ### Node.js Versions
+
 - **Supported**: Node.js 14+ (tested with latest LTS)
 - **Platforms**: Windows 10/11, Windows Server 2019/2022
 
 ### Docker Environments
+
 - **Docker Engine**: 20.10+ in WSL 2
 - **Container Support**: All Linux-based containers
 - **Registry Support**: Docker Hub, NPM, PyPI, and custom registries
@@ -112,6 +122,7 @@ corporate-ssl-manager/
 ## 📋 Parameters
 
 ### WSL Script Parameters
+
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `SearchPatterns` | Patterns to search for in certificates | Corporate, CA, SSL patterns |
@@ -121,7 +132,8 @@ corporate-ssl-manager/
 | `RequireAllCerts` | Install all effective certificates | `$false` |
 | `DryRun` | Analyze without installing | `$false` |
 
-### Node.js Script Parameters  
+### Node.js Script Parameters
+
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `SearchPatterns` | Patterns to search for in certificates | Corporate, CA, SSL patterns |
@@ -131,6 +143,7 @@ corporate-ssl-manager/
 ## 🔍 How It Works
 
 ### 1. Discovery Phase
+
 ```
 🔍 Scanning certificate stores...
    ├── LocalMachine\Root (Trusted Root CAs)
@@ -139,7 +152,8 @@ corporate-ssl-manager/
    └── Pattern matching and filtering
 ```
 
-### 2. Analysis Phase  
+### 2. Analysis Phase
+
 ```
 📊 Analyzing certificates...
    ├── Pattern matching (CA, Corporate, SSL...)
@@ -149,6 +163,7 @@ corporate-ssl-manager/
 ```
 
 ### 3. Testing Phase
+
 ```
 🧪 Testing certificate effectiveness...
    ├── Baseline connectivity test
@@ -158,6 +173,7 @@ corporate-ssl-manager/
 ```
 
 ### 4. Installation Phase
+
 ```
 ⚙️ Installing effective certificates...
    ├── WSL: Copy to certificate directory
@@ -182,6 +198,7 @@ corporate-ssl-manager/
 ## 🛠️ Common Usage Patterns
 
 ### Search for Specific Corporate Certificates
+
 ```powershell
 # Search for your company's certificates
 .\Install-CorporateSSL-WSL.ps1 -SearchPatterns @("YourCompany", "Internal CA") -Verbose
@@ -191,6 +208,7 @@ corporate-ssl-manager/
 ```
 
 ### Test Specific Domains
+
 ```powershell
 # Test against internal corporate domains
 .\Install-CorporateSSL-WSL.ps1 -TestDomains @("https://internal.company.com", "https://app.company.com") -Verbose
@@ -200,6 +218,7 @@ corporate-ssl-manager/
 ```
 
 ### Advanced Configuration
+
 ```powershell
 # Install all effective certificates (comprehensive approach)
 .\Install-CorporateSSL-WSL.ps1 -RequireAllCerts -Verbose
@@ -214,7 +233,7 @@ corporate-ssl-manager/
 ## 🔒 Security Considerations
 
 - **Administrator privileges** required for certificate store access
-- **Root access in WSL** required for certificate installation  
+- **Root access in WSL** required for certificate installation
 - **Corporate compliance** - only installs certificates already trusted by Windows
 - **Audit trail** - comprehensive logging of all operations
 - **No security bypass** - maintains proper SSL validation
@@ -228,6 +247,7 @@ corporate-ssl-manager/
 ## 🧪 Testing
 
 ### WSL Testing
+
 ```bash
 # Verify installed certificates
 ls -la /usr/local/share/ca-certificates/
@@ -239,6 +259,7 @@ curl -I https://github.com
 ```
 
 ### Node.js Testing
+
 ```javascript
 // Check environment variables
 console.log('NODE_EXTRA_CA_CERTS:', process.env.NODE_EXTRA_CA_CERTS);
@@ -263,7 +284,7 @@ This project is licensed under the MIT License.
 
 - Original WSL certificate installation concept by [emilwojcik93](https://gist.github.com/emilwojcik93/7eb1e172f8bb038e324c6e4a7f4ccaaa)
 - WSL distribution support patterns from community contributions
-- Corporate SSL inspection best practices from enterprise environments
+- Corporate SSL/TLS inspection best practices from enterprise environments
 
 ---
 

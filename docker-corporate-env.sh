@@ -1,5 +1,5 @@
 # Docker Corporate Certificate Environment
-# Corporate SSL Certificate Configuration for Docker
+# Corporate SSL/TLS Certificate Configuration for Docker
 
 # Only load in interactive shells
 case $- in
@@ -35,7 +35,7 @@ docker-test-npmjs() {
 
 # Test all Docker functionality
 test-docker-all() {
-    echo "Testing Docker Corporate SSL Configuration:"
+    echo "Testing Docker Corporate SSL/TLS Configuration:"
     echo "========================================="
     docker-test-google
     docker-test-github
@@ -44,7 +44,7 @@ test-docker-all() {
 }
 
 # Display status
-echo "Docker Corporate SSL Environment Loaded"
+echo "Docker Corporate SSL/TLS Environment Loaded"
 echo "Use 'docker-corp' for containers with automatic certificate injection"
 echo "Quick tests: docker-test-google, docker-test-github, docker-test-npmjs"
 echo "Full test: test-docker-all"

@@ -500,8 +500,8 @@ function Install-DockerSSLConfiguration {
 }
 
 # Main execution
-Write-ColorLog 'Corporate SSL Certificate Manager for Docker' -Level 'TITLE' -Color Magenta
-Write-ColorLog '============================================' -Level 'TITLE' -Color Magenta
+Write-ColorLog 'Corporate SSL/TLS Certificate Manager for Docker' -Level 'TITLE' -Color Magenta
+Write-ColorLog '================================================' -Level 'TITLE' -Color Magenta
 
 # Check prerequisites
 try {
